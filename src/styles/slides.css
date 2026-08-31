@@ -628,10 +628,27 @@
 }
 .roadmap-col h3 {
   font-family: var(--font-serif);
-  font-weight: 500;
-  font-size: 1.35rem;
-  letter-spacing: -0.02em;
+  font-weight: 600;
+  font-size: 1.9rem;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: rgb(var(--text));
+  position: relative;
+  padding-bottom: 0.75rem;
 }
+.roadmap-col h3::after {
+  content: "";
+  display: block;
+  width: 32px;
+  height: 3px;
+  margin-top: 0.7rem;
+  border-radius: 2px;
+  background: rgb(var(--accent-mint-deep));
+}
+.ppt-slide--dark .roadmap-col h3 { color: white; }
+.ppt-slide--dark .roadmap-col h3::after { background: rgb(var(--accent-mint)); }
+.roadmap-col--primary h3::after { background: rgb(var(--accent-mint-deep)); }
+.ppt-slide--dark .roadmap-col--primary h3::after { background: rgb(var(--accent-mint)); }
 .roadmap-col__summary {
   margin-top: 0.6rem;
   color: rgb(var(--text-muted));
