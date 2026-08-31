@@ -14,13 +14,14 @@ import IssueRow from '../../components/slides/IssueRow.astro';
 import RoadmapColumn from '../../components/slides/RoadmapColumn.astro';
 import RoadmapItem from '../../components/slides/RoadmapItem.astro';
 import AssetHighlight from '../../components/slides/AssetHighlight.astro';
+import HeroFold from '../../components/HeroFold.astro';
 
 {/* ========== 01 · 封面 ========== */}
 <section class="slide-cover-deck">
   <div class="slide-cover-deck__inner">
     <div class="slide-cover-deck__kicker">GTM · 一期阶段性汇报</div>
     <h1 class="slide-cover-deck__title">
-      智效 GTM · <em>一期阶段性汇报</em>
+      <HeroFold text="智效 GTM · 一期阶段性汇报" />
     </h1>
     <p class="slide-cover-deck__desc">
       20 天集中开发后，「生成—审核—展示」完整链路已跑通，24 类材料中 23 类可生成，具备进入小范围试点的条件。
@@ -28,7 +29,6 @@ import AssetHighlight from '../../components/slides/AssetHighlight.astro';
     <div class="slide-cover-deck__meta">
       <span>2026-08-28</span>
       <span>2026-W35</span>
-      <span>方晶</span>
     </div>
   </div>
 </section>
