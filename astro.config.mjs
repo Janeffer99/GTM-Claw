@@ -7,7 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://bohefang.github.io',
+  site: 'https://janeffer99.github.io',
   base: '/GTM-Claw/',
   trailingSlash: 'ignore',
 

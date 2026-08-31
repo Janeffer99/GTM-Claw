@@ -2,7 +2,7 @@
 
 > 面向组织的产品线 GTM 材料智能化平台 · 进度周报站点
 
-**在线访问**：https://bohefang.github.io/GTM-Claw/
+**在线访问**：https://janeffer99.github.io/GTM-Claw/
 
 ## 技术栈
 
@@ -50,4 +50,4 @@ npm run preview   # 预览 build 产物
 
 ## License
 
-内容与代码均归 [@BoheFang](https://github.com/BoheFang) 所有。
+内容与代码均归 [@Janeffer99](https://github.com/Janeffer99) 所有。
