@@ -1,0 +1,28 @@
+---
+/**
+ * CapabilityCard — a large card showing one capability with completion %.
+ * Used on the "三大能力全景" slide.
+ */
+export interface Props {
+  num: string;         // "WRITE · 写"
+  title: string;       // "对话式材料生成"
+  summary: string;     // short description
+  kpi: string;         // "90"
+  kpiUnit?: string;    // "%"
+  featured?: boolean;
+}
+
+const { num, title, summary, kpi, kpiUnit = '%', featured = false } = Astro.props;
+---
+
+<article class:list={['cap-card', { 'cap-card--featured': featured }]}>
+  <div class="cap-card__num">{num}</div>
+  <h3 class="cap-card__title">{title}</h3>
+  <p class="cap-card__summary">{summary}</p>
+  <div class="cap-card__kpi">
+    {kpi}<small>{kpiUnit}</small>
+  </div>
+  <div class="cap-card__list">
+    <slot />
+  </div>
+</article>

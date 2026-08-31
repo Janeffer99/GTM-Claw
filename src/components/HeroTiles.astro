@@ -1,0 +1,77 @@
+---
+/**
+ * HeroTiles — A grid backdrop where each cell lights up on hover.
+ *
+ * Rendered on the server as a static grid; interactivity is pure CSS :hover,
+ * so no client JS ships. The grid is absolutely positioned behind the hero
+ * content and only reacts to pointer events on the tiles themselves.
+ */
+export interface Props {
+  /** Approximate tile edge in px. Cells snap to fit the container. */
+  tile?: number;
+  /** Extra classes on the outer container. */
+  class?: string;
+}
+
+const { tile = 56, class: className = '' } = Astro.props;
+
+// Fixed rows/cols large enough to cover any hero viewport without reflow.
+// Extra cells outside the viewport are simply clipped by overflow-hidden.
+const rows = 14;
+const cols = 28;
+const total = rows * cols;
+---
+
+<div
+  class:list={['hero-tiles', className]}
+  style={`--tile-size:${tile}px; --cols:${cols}; --rows:${rows};`}
+  aria-hidden="true"
+>
+  {Array.from({ length: total }).map(() => <span class="tile" />)}
+</div>
+
+<style>
+  .hero-tiles {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--cols), var(--tile-size));
+    grid-template-rows: repeat(var(--rows), var(--tile-size));
+    justify-content: center;
+    align-content: center;
+    overflow: hidden;
+    /* Fade the grid toward the edges so it feels like an ambient backdrop. */
+    -webkit-mask-image: radial-gradient(
+      ellipse at center,
+      rgb(0 0 0 / 0.9) 0%,
+      rgb(0 0 0 / 0.6) 55%,
+      transparent 90%
+    );
+    mask-image: radial-gradient(
+      ellipse at center,
+      rgb(0 0 0 / 0.9) 0%,
+      rgb(0 0 0 / 0.6) 55%,
+      transparent 90%
+    );
+    pointer-events: none;
+  }
+
+  .tile {
+    width: var(--tile-size);
+    height: var(--tile-size);
+    border-right: 1px solid rgb(var(--border));
+    border-bottom: 1px solid rgb(var(--border));
+    background: transparent;
+    transition: background-color 160ms ease-out;
+    pointer-events: auto;
+  }
+
+  .tile:hover {
+    background: rgb(var(--tile-hover, var(--bg-elev)));
+    transition-duration: 0ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tile { transition: none; }
+  }
+</style>

@@ -1,0 +1,359 @@
+@import "tailwindcss";
+
+/* ---------- Design tokens ---------- */
+:root {
+  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Light — cool paper palette with a hint of mint on elevated surfaces */
+  --bg: 245 246 247;         /* #F5F6F7 cool off-white page */
+  --bg-elev: 255 255 255;    /* pure white card surface */
+  --border: 224 228 224;     /* soft cool neutral, barely visible */
+  --text: 26 26 26;          /* near-black */
+  --text-muted: 92 96 92;    /* cool mid gray */
+  --text-subtle: 155 160 155;
+  --accent: 26 26 26;
+  --accent-fg: 245 246 247;
+  --accent-mint: 168 224 181; /* #A8E0B5 mint highlight (accent only) */
+  --accent-mint-deep: 20 149 106; /* deep mint for text on light bg */
+  --accent-mint-soft: 229 248 238; /* very pale mint fill */
+  --accent-mint-line: 188 235 211; /* mint-tinted border */
+  --slide-dark: 13 21 18; /* deep dark for cover/dark slides */
+  --slide-dark-2: 20 35 29;
+  --warn: 232 137 54;
+  --warn-soft: 255 241 229;
+  --link: 37 99 235;
+  --tile-hover: 226 232 226; /* very pale mint for hero tiles */
+  /* Cursor spotlight on cards. Light mode uses mint so the glow reads as
+     an accent-tinted highlight instead of a warm cream or dark stain. */
+  --card-glow: 168 224 181;  /* mint */
+  --card-rim: 130 200 155;   /* deeper mint edge */
+}
+
+.dark {
+  --bg: 8 9 10;
+  --bg-elev: 20 21 23;
+  --border: 39 39 42;
+  --text: 244 244 245;
+  --text-muted: 161 161 170;
+  --text-subtle: 113 113 122;
+  --accent: 244 244 245;
+  --accent-fg: 8 9 10;
+  --accent-mint: 130 200 155;
+  --link: 96 165 250;
+  --tile-hover: 39 39 42;
+  --card-glow: 130 200 155;  /* mint — softer than pure white on dark */
+  --card-rim: 168 224 181;   /* brighter mint edge */
+}
+
+@theme {
+  /* Bind Tailwind's font utilities to our own tokens (defined on :root above). */
+  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, "Times New Roman",
+    "Songti SC", "SimSun", serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: rgb(var(--bg));
+  color: rgb(var(--text));
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------- Hero title (serif accent) ---------- */
+.hero-title {
+  font-family: var(--font-serif);
+  font-feature-settings: "ss01", "kern";
+  letter-spacing: -0.015em;
+}
+
+/* ---------- Hero cover fade ----------
+   A JS scroll listener on the home page writes a 0→1 progress into
+   --hero-progress on .hero-scroll as it scrolls out. CSS derives opacity
+   and offset from that variable — no dependency on the still-shipping
+   scroll-driven animation spec. */
+.hero-content {
+  opacity: calc(1 - var(--hero-progress, 0));
+  transform: translateY(calc(var(--hero-progress, 0) * -80px));
+  will-change: opacity, transform;
+}
+.hero-tiles-bg {
+  opacity: calc(1 - var(--hero-progress, 0));
+  will-change: opacity;
+}
+
+/* ---------- Week card with pointer-following spotlight ----------
+   Two aria-hidden layers sit under the card content:
+     .week-card-glow   — a soft light halo that follows the cursor
+     .week-card-border — a bright rim highlight that lights up the edge
+                         nearest to the cursor
+   A shared pointermove listener (see src/scripts/card-spotlight.ts) writes
+   normalized cursor position into --mx / --my (0..100 percent) and a
+   fade-in --a (0..1) that grows the closer the cursor is to the card.
+
+   Zero JS per card — one listener services them all. */
+.week-card {
+  position: relative;
+  isolation: isolate;
+  background: rgb(var(--bg-elev));
+  border: 1px solid rgb(var(--border));
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.25s;
+}
+.week-card:hover {
+  transform: translateY(-2px);
+  border-color: rgb(var(--text-subtle));
+}
+
+.week-card-glow,
+.week-card-border {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--a, 0);
+  border-radius: inherit;
+}
+/* Soft spotlight beneath the content, painted where the cursor is. */
+.week-card-glow {
+  z-index: 0;
+  background: radial-gradient(
+    240px circle at var(--mx, 50%) var(--my, 50%),
+    rgb(var(--card-glow) / 0.28),
+    transparent 70%
+  );
+}
+/* Bright rim highlight — a thicker gradient masked to a 1px border ring. */
+.week-card-border {
+  z-index: 1;
+  padding: 1px;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 50%),
+    rgb(var(--card-rim) / 1),
+    rgb(var(--card-rim) / 0.35) 40%,
+    transparent 65%
+  );
+  /* Cut out the interior so only the border ring paints. */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+          mask-composite: exclude;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .week-card { transition: none; }
+  .week-card:hover { transform: none; }
+}
+
+
+   Each top-level block inside .prose-week (and the outer .reveal wrapper)
+   starts hidden below and fades in when it enters the viewport. Triggered
+   by an IntersectionObserver — see src/scripts/reveal-on-scroll.ts. */
+.reveal,
+.prose-week > * {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible,
+.prose-week > .is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .prose-week > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-content, .hero-tiles-bg, .reveal {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ---------- Prose (content) ---------- */
+.prose-week {
+  color: rgb(var(--text));
+  max-width: 68ch;
+  line-height: 1.75;
+  font-size: 1rem;
+}
+
+.prose-week > * + * { margin-top: 1.15em; }
+
+.prose-week h1,
+.prose-week h2,
+.prose-week h3,
+.prose-week h4 {
+  color: rgb(var(--text));
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+.prose-week h1 { font-size: 2rem; margin-top: 0; }
+.prose-week h2 { font-size: 1.5rem; margin-top: 2.5em; padding-top: 0.4em; }
+.prose-week h3 { font-size: 1.15rem; margin-top: 2em; }
+.prose-week h4 { font-size: 1rem; }
+
+.prose-week h2::before {
+  content: "";
+  display: block;
+  width: 32px;
+  height: 2px;
+  background: rgb(var(--text));
+  opacity: 0.9;
+  margin-bottom: 0.6em;
+}
+
+.prose-week p { color: rgb(var(--text)); }
+.prose-week strong { color: rgb(var(--text)); font-weight: 600; }
+.prose-week em { color: rgb(var(--text-muted)); }
+
+.prose-week a {
+  color: rgb(var(--link));
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.prose-week a:hover { text-decoration-thickness: 2px; }
+
+.prose-week ul,
+.prose-week ol {
+  padding-left: 1.4em;
+}
+.prose-week ul { list-style: disc; }
+.prose-week ol { list-style: decimal; }
+.prose-week li { margin: 0.4em 0; color: rgb(var(--text)); }
+.prose-week li::marker { color: rgb(var(--text-subtle)); }
+
+.prose-week blockquote {
+  border-left: 3px solid rgb(var(--border));
+  padding: 0.2em 1em;
+  color: rgb(var(--text-muted));
+  font-style: normal;
+}
+
+.prose-week code {
+  background: rgb(var(--bg-elev));
+  border: 1px solid rgb(var(--border));
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+.prose-week pre {
+  background: rgb(var(--bg-elev));
+  border: 1px solid rgb(var(--border));
+  padding: 1em 1.2em;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+.prose-week pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.prose-week table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.2em 0;
+  font-size: 0.95em;
+}
+.prose-week thead {
+  border-bottom: 1px solid rgb(var(--border));
+}
+.prose-week th {
+  text-align: left;
+  padding: 0.6em 0.8em;
+  font-weight: 600;
+  color: rgb(var(--text-muted));
+  font-size: 0.85em;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.prose-week td {
+  padding: 0.7em 0.8em;
+  border-bottom: 1px solid rgb(var(--border));
+  vertical-align: top;
+}
+.prose-week tbody tr:hover {
+  background: rgb(var(--bg-elev));
+}
+
+.prose-week hr {
+  border: 0;
+  border-top: 1px solid rgb(var(--border));
+  margin: 2.5em 0;
+}
+
+.prose-week img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid rgb(var(--border));
+  display: block;
+  margin: 1.2em 0;
+}
+
+/* Images inside table cells stay inline and don't blow up row heights. */
+.prose-week td img {
+  display: inline-block;
+  margin: 0.5em 0 0;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+/* Anchor headings */
+.prose-week :is(h2, h3, h4) {
+  scroll-margin-top: 5rem;
+}
+
+/* ---------- TOC ---------- */
+.toc-link {
+  display: block;
+  padding: 0.35rem 0.75rem;
+  color: rgb(var(--text-subtle));
+  font-size: 0.875rem;
+  line-height: 1.4;
+  border-left: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+.toc-link:hover { color: rgb(var(--text)); }
+.toc-link[data-active="true"] {
+  color: rgb(var(--text));
+  border-left-color: rgb(var(--text));
+  font-weight: 500;
+}
+.toc-link.toc-h3 { padding-left: 1.75rem; font-size: 0.8125rem; }
+
+/* Selection */
+::selection {
+  background: rgb(var(--text));
+  color: rgb(var(--bg));
+}

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bohefang.github.io/GTM-Claw/sitemap-index.xml

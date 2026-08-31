@@ -1,0 +1,477 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SideNav from '../../components/SideNav.astro';
+import { groupByMonth } from '../../lib/weeks';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('weeks', ({ data }) => !data.draft);
+  return entries.map((entry) => ({
+    params: { slug: entry.id.replace(/\.mdx?$/, '') },
+    props: { entry, allEntries: entries },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'weeks'>;
+  allEntries: CollectionEntry<'weeks'>[];
+}
+
+const { entry, allEntries } = Astro.props;
+const { Content } = await render(entry);
+const { title, week, summary } = entry.data;
+const base = import.meta.env.BASE_URL;
+
+const groups = groupByMonth(
+  [...allEntries].sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+);
+const currentSlug = entry.id.replace(/\.mdx?$/, '');
+---
+
+<BaseLayout title={title} description={summary}>
+  <!-- Slide deck root. A client script slices the raw <Content /> into
+       <section class="slide"> by H2 boundaries, wraps them in the deck, and
+       wires up snap navigation. -->
+  <div class="deck-root" data-week={week} data-title={title}>
+    <!-- Cover slide, always rendered first -->
+    <section class="slide slide-cover" data-slide-index="0">
+      <div class="slide-inner">
+        <p class="slide-eyebrow">{week}</p>
+        <h1 class="slide-cover-title">{title}</h1>
+        {summary && <p class="slide-cover-summary">{summary}</p>}
+        <div class="slide-cover-hint" aria-hidden="true">
+          <span>向下滚动开始</span>
+          <span class="arrow">↓</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Raw content — will be sliced into slides by client script. -->
+    <div class="deck-source" hidden aria-hidden="true">
+      <div class="prose-week">
+        <Content />
+      </div>
+    </div>
+
+    <!-- Slides will be appended here by client script -->
+    <div class="deck-slides"></div>
+
+    <!-- Home button (top-left, left of the progress indicator) -->
+    <a href={base} class="deck-home-btn" aria-label="返回首页">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+      <span>首页</span>
+    </a>
+
+    <!-- Progress indicator -->
+    <div class="deck-progress" aria-hidden="true">
+      <span class="deck-progress-current">1</span>
+      <span class="deck-progress-sep">/</span>
+      <span class="deck-progress-total">1</span>
+    </div>
+
+    <!-- Side dots -->
+    <nav class="deck-dots" aria-label="幻灯片导航"></nav>
+
+    <!-- "All reports" trigger (top-right) -->
+    <button
+      type="button"
+      class="deck-all-btn"
+      aria-label="打开全部周报"
+      aria-controls="deck-drawer"
+    >
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+      <span>全部周报</span>
+    </button>
+
+    <!-- Slide-out drawer with the all-reports list -->
+    <aside id="deck-drawer" class="deck-drawer" aria-hidden="true">
+      <div class="deck-drawer-backdrop"></div>
+      <div class="deck-drawer-panel" role="dialog" aria-modal="true" aria-label="全部周报">
+        <div class="deck-drawer-head">
+          <span class="deck-drawer-title">全部周报</span>
+          <button type="button" class="deck-drawer-close" aria-label="关闭">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        <div class="deck-drawer-body">
+          <SideNav groups={groups} currentSlug={currentSlug} />
+        </div>
+      </div>
+    </aside>
+  </div>
+</BaseLayout>
+
+<style is:global>
+  /* Hide the Header/Footer on deck pages — full-screen presentation mode. */
+  body:has(.deck-root) > header,
+  body:has(.deck-root) > footer {
+    display: none;
+  }
+  body:has(.deck-root) {
+    overflow: hidden;
+  }
+
+  .deck-root {
+    height: 100vh;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    background: rgb(var(--bg));
+    position: relative;
+  }
+  .deck-source { display: none; }
+
+  .slide {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 5vw;
+    box-sizing: border-box;
+    position: relative;
+  }
+  .slide-inner {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* Cover slide */
+  .slide-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgb(var(--text-subtle));
+    margin-bottom: 1.5rem;
+  }
+  .slide-cover-title {
+    font-family: var(--font-serif);
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: rgb(var(--text));
+    margin: 0 0 1.5rem;
+  }
+  .slide-cover-summary {
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+    line-height: 1.6;
+    color: rgb(var(--text-muted));
+    max-width: 42em;
+    margin: 0 0 3rem;
+  }
+  .slide-cover-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    color: rgb(var(--text-subtle));
+  }
+  .slide-cover-hint .arrow {
+    display: inline-block;
+    animation: bounce 1.6s infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
+  }
+
+  /* Content slides */
+  .slide-content .slide-inner {
+    color: rgb(var(--text));
+  }
+  .slide-content :is(h2) {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4.5vw, 3.25rem);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin: 0 0 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgb(var(--border));
+  }
+  .slide-content :is(h3) {
+    font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+    font-weight: 600;
+    margin: 2em 0 0.6em;
+    color: rgb(var(--text));
+  }
+  .slide-content :is(h4) {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 1.6em 0 0.5em;
+  }
+  .slide-content :is(p, ul, ol, blockquote, table) {
+    font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+    line-height: 1.7;
+    margin: 0.9em 0;
+    color: rgb(var(--text));
+  }
+  .slide-content ul, .slide-content ol { padding-left: 1.4em; }
+  .slide-content ul { list-style: disc; }
+  .slide-content ol { list-style: decimal; }
+  .slide-content li { margin: 0.4em 0; }
+  .slide-content li::marker { color: rgb(var(--text-subtle)); }
+  .slide-content strong { color: rgb(var(--text)); font-weight: 600; }
+  .slide-content a {
+    color: rgb(var(--link));
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .slide-content blockquote {
+    border-left: 3px solid rgb(var(--border));
+    padding: 0.2em 1em;
+    color: rgb(var(--text-muted));
+  }
+  .slide-content code {
+    background: rgb(var(--bg-elev));
+    border: 1px solid rgb(var(--border));
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+  }
+  .slide-content pre {
+    background: rgb(var(--bg-elev));
+    border: 1px solid rgb(var(--border));
+    padding: 1em 1.2em;
+    border-radius: 8px;
+    overflow-x: auto;
+  }
+  .slide-content pre code { background: transparent; border: none; padding: 0; }
+
+  .slide-content table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.85rem, 1vw, 0.95rem);
+  }
+  .slide-content th {
+    text-align: left;
+    padding: 0.6em 0.8em;
+    font-weight: 600;
+    color: rgb(var(--text-muted));
+    font-size: 0.85em;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgb(var(--border));
+  }
+  .slide-content td {
+    padding: 0.7em 0.8em;
+    border-bottom: 1px solid rgb(var(--border));
+    vertical-align: top;
+  }
+  .slide-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid rgb(var(--border));
+    display: block;
+    margin: 1.2em 0;
+  }
+  .slide-content td img {
+    display: inline-block;
+    margin: 0.5em 0 0;
+    vertical-align: middle;
+  }
+
+  /* Home button (top-left) */
+  .deck-home-btn {
+    position: fixed;
+    top: 1.25rem;
+    left: 1.5rem;
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.9rem 0.4rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid rgb(var(--border));
+    background: rgb(var(--bg) / 0.7);
+    backdrop-filter: blur(8px);
+    color: rgb(var(--text-muted));
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: color 0.15s, background 0.15s;
+  }
+  .deck-home-btn:hover {
+    color: rgb(var(--text));
+    background: rgb(var(--bg-elev));
+  }
+
+  /* Progress indicator (top-left, next to home button) */
+  .deck-progress {
+    position: fixed;
+    top: 1.25rem;
+    left: 7.5rem;
+    z-index: 10;
+    display: flex;
+    gap: 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: rgb(var(--text-subtle));
+    background: rgb(var(--bg) / 0.7);
+    backdrop-filter: blur(8px);
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid rgb(var(--border));
+  }
+  .deck-progress-current { color: rgb(var(--text)); font-weight: 600; }
+  .deck-progress-sep { opacity: 0.4; }
+
+  /* Side dots (right center) */
+  .deck-dots {
+    position: fixed;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    z-index: 10;
+  }
+  .deck-dot {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1px solid rgb(var(--text-subtle));
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  }
+  .deck-dot:hover { border-color: rgb(var(--text)); transform: scale(1.2); }
+  .deck-dot[data-active="true"] {
+    background: rgb(var(--text));
+    border-color: rgb(var(--text));
+  }
+
+  /* All-reports button (top-right) */
+  .deck-all-btn {
+    position: fixed;
+    top: 1.25rem;
+    right: 1.5rem;
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid rgb(var(--border));
+    background: rgb(var(--bg) / 0.7);
+    backdrop-filter: blur(8px);
+    color: rgb(var(--text-muted));
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+  }
+  .deck-all-btn:hover {
+    color: rgb(var(--text));
+    background: rgb(var(--bg-elev));
+  }
+
+  /* Drawer */
+  .deck-drawer[aria-hidden="true"] { pointer-events: none; }
+  .deck-drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgb(0 0 0 / 0.4);
+    opacity: 0;
+    transition: opacity 0.25s;
+    z-index: 20;
+  }
+  .deck-drawer-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(360px, 90vw);
+    background: rgb(var(--bg));
+    border-left: 1px solid rgb(var(--border));
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 21;
+    display: flex;
+    flex-direction: column;
+  }
+  .deck-drawer[aria-hidden="false"] .deck-drawer-backdrop { opacity: 1; }
+  .deck-drawer[aria-hidden="false"] .deck-drawer-panel { transform: translateX(0); }
+  .deck-drawer[aria-hidden="false"] { pointer-events: auto; }
+  .deck-drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgb(var(--border));
+  }
+  .deck-drawer-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgb(var(--text-muted));
+  }
+  .deck-drawer-close {
+    background: transparent;
+    border: none;
+    padding: 0.4rem;
+    color: rgb(var(--text-muted));
+    cursor: pointer;
+    border-radius: 6px;
+  }
+  .deck-drawer-close:hover {
+    background: rgb(var(--bg-elev));
+    color: rgb(var(--text));
+  }
+  .deck-drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.25rem;
+  }
+
+  /* Slide enter animation */
+  .slide {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .slide.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .slide { opacity: 1; transform: none; transition: none; }
+    .deck-root { scroll-behavior: auto; }
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .deck-dots { display: none; }
+    .deck-all-btn span,
+    .deck-home-btn span { display: none; }
+    .deck-all-btn,
+    .deck-home-btn { padding: 0.5rem; }
+    .deck-home-btn { padding: 0.5rem; }
+    .deck-progress { left: 4rem; }
+    .slide { padding: 3rem 1.25rem; }
+  }
+</style>
+
+<script>
+  import { initDeck } from '../../scripts/deck';
+  initDeck();
+</script>

@@ -1,0 +1,269 @@
+---
+title: "2026-08-28"
+week: "2026-W35"
+date: 2026-08-28
+summary: "一期阶段性汇报：生成—审核—展示完整链路跑通，24 类材料中 23 类可生成，二期主攻广度扩展。"
+tags: ["一期汇报", "写-审-看", "OfficeCLI"]
+---
+
+import Slide from '../../components/slides/Slide.astro';
+import CapabilityCard from '../../components/slides/CapabilityCard.astro';
+import CapListItem from '../../components/slides/CapListItem.astro';
+import MetricRow from '../../components/slides/MetricRow.astro';
+import IssueRow from '../../components/slides/IssueRow.astro';
+import RoadmapColumn from '../../components/slides/RoadmapColumn.astro';
+import RoadmapItem from '../../components/slides/RoadmapItem.astro';
+import AssetHighlight from '../../components/slides/AssetHighlight.astro';
+
+{/* ========== 01 · 封面 ========== */}
+<section class="slide-cover-deck">
+  <div class="slide-cover-deck__inner">
+    <div class="slide-cover-deck__kicker">GTM · 一期阶段性汇报</div>
+    <h1 class="slide-cover-deck__title">
+      智效 GTM · <em>一期阶段性汇报</em>
+    </h1>
+    <p class="slide-cover-deck__desc">
+      20 天集中开发后，「生成—审核—展示」完整链路已跑通，24 类材料中 23 类可生成，具备进入小范围试点的条件。
+    </p>
+    <div class="slide-cover-deck__meta">
+      <span>2026-08-28</span>
+      <span>2026-W35</span>
+      <span>方晶</span>
+    </div>
+  </div>
+</section>
+
+{/* ========== 02 · 一句话结论 ========== */}
+<Slide
+  tag="01"
+  eyebrow="一句话结论"
+  title="已形成可试点的材料生产闭环"
+  subtitle="24 类材料中 23 类可生成、Word 单份稳定 10 分钟产出，可进入小范围试点。下期主攻生成能力的广度扩展。"
+>
+  <div class="slide-cols slide-cols--3-2">
+    <div>
+      <div class="dark-panel">
+        <div class="dark-panel__label">当前基线</div>
+        <div class="dark-panel__title">
+          完成「写、审、看」链路跑通，<em>Word 生成具备对外交付质量。</em>
+        </div>
+      </div>
+    </div>
+    <div class="metric-grid" style="grid-template-columns: 1fr;">
+      <MetricRow value="~10 分钟" label="单份 Word 稳定产出" featured />
+      <MetricRow value="23 / 24" label="材料类型已可生成" />
+      <MetricRow value="1 – 8" label="一次对话可并行生成材料数" />
+    </div>
+  </div>
+</Slide>
+
+{/* ========== 03 · 三大能力全景 ========== */}
+<Slide
+  tag="02"
+  eyebrow="三大能力全景"
+  title="用对话生成、AI 辅助审核、集中管理展示"
+  subtitle="一个平台完成从生成到发布的全链路。"
+>
+  <div class="cap-grid">
+    <CapabilityCard
+      num="WRITE · 写"
+      title="对话式材料生成"
+      summary="按材料清单、模板与任务上下文生成并区分版本。"
+      kpi="~90"
+      featured
+    >
+      <CapListItem index="01">24 类清单，23 类可生成</CapListItem>
+      <CapListItem index="02">单次对话可并行 1–8 种材料</CapListItem>
+      <CapListItem index="03">同一对话内可区分多次版本</CapListItem>
+    </CapabilityCard>
+    <CapabilityCard
+      num="REVIEW · 审"
+      title="AI 辅助审核闭环"
+      summary="AI 生成审核意见，最终由人工作通过或退回决策。"
+      kpi="100"
+    >
+      <CapListItem index="01">生成过程实时步骤流可见</CapListItem>
+      <CapListItem index="02">支持人工通过与退回</CapListItem>
+      <CapListItem index="03">审核链路已完成开发</CapListItem>
+    </CapabilityCard>
+    <CapabilityCard
+      num="VIEW · 看"
+      title="进度与材料展示"
+      summary="以只读视图管理生成进度与已发布成果。"
+      kpi="100"
+    >
+      <CapListItem index="01">24 类材料的五态进度地图</CapListItem>
+      <CapListItem index="02">已发布材料可下载</CapListItem>
+      <CapListItem index="03">材料库与进度中心已完成</CapListItem>
+    </CapabilityCard>
+  </div>
+
+  <figure class="slide-evidence">
+    <button
+      type="button"
+      class="slide-evidence__figure"
+      data-lightbox-src="/GTM-Claw/images/2026-W35/platform-screenshot.png"
+      data-lightbox-alt="智效 GTM 平台实拍：三大能力全景"
+      aria-label="放大查看平台截图"
+    >
+      <img
+        src="/GTM-Claw/images/2026-W35/platform-screenshot.png"
+        alt="智效 GTM 平台实拍：三大能力全景"
+        loading="lazy"
+      />
+    </button>
+  </figure>
+</Slide>
+
+{/* ========== 04 · 已达标 ========== */}
+<Slide
+  tag="03"
+  eyebrow="已验证成果"
+  title="先把稳定的交付基线跑出来"
+  subtitle="从此前不稳定状态收敛为可作为试点基线的能力。"
+>
+  <div class="slide-cols slide-cols--3-2">
+    <div class="dark-panel">
+      <div class="dark-panel__label">已达标的试点基线</div>
+      <div class="dark-panel__title">
+        Word 生成已从此前不稳定状态收敛，<em>具备对外交付的质量与节奏。</em>
+      </div>
+      <div class="metric-grid metric-grid--3" style="margin-top: 2rem;">
+        <MetricRow value="10 分钟" label="单份 Word 稳定产出" dark />
+        <MetricRow value="1–8" label="一次对话并行材料数" dark />
+        <MetricRow value="多版本" label="同一对话内可比对回溯" dark />
+      </div>
+    </div>
+    <div style="display: grid; gap: 1rem; grid-template-rows: 1fr 1fr;">
+      <div class="note-card">
+        <span class="note-card__mini">生成稳定性</span>
+        <h4>从不可预测，变成可作为试点基线的稳定能力</h4>
+        <p>该结论仅针对当前已验证的一期链路，不外推为所有材料类型和所有载体都已完全成熟。</p>
+      </div>
+      <div class="note-card">
+        <span class="note-card__mini">产品闭环</span>
+        <h4>"审"和"看"不再是生成后的空白区</h4>
+        <p>实时过程、人工审核决策、进度状态与已发布材料的展示，已经纳入同一平台链路。</p>
+      </div>
+    </div>
+  </div>
+</Slide>
+
+{/* ========== 05 · 仍需处理 ========== */}
+<Slide
+  tag="04"
+  eyebrow="试点前仍需处理"
+  title="交付末端仍依赖人工二次处理"
+  subtitle="共性问题是生成结果需下载到本地修改，才能作为最终交付材料。"
+>
+  <div class="issue-list">
+    <IssueRow
+      priority="high"
+      title="PPT 封面标识无法去除"
+      image="/GTM-Claw/images/2026-W35/ppt-mark.png"
+      imageAlt="PPT 封面 AI 标记"
+    >
+      「汇报人」及「内容由 AI 生成」标记需依赖智效 AIPPT 输出改造，后续再评估 OfficeCLI 修改封面。
+    </IssueRow>
+    <IssueRow
+      priority="mid"
+      title="Word 目录仍需手动更新"
+      image="/GTM-Claw/images/2026-W35/word-toc.png"
+      imageAlt="Word 目录需手动更新"
+    >
+      受 OfficeCLI 对目录应用的限制影响，目前必须在本地更新。
+    </IssueRow>
+    <IssueRow
+      priority="mid"
+      title="PPT 无法进行精准局部修改"
+      image="/GTM-Claw/images/2026-W35/ppt-partial-edit.png"
+      imageAlt="PPT 无法局部修改"
+    >
+      对话内修改需重新启动智效 AIPPT 生成流程，暂不支持局部编辑。
+    </IssueRow>
+    <IssueRow
+      priority="low"
+      title="Excel 内容可生成，但模板样式未遵循"
+      image="/GTM-Claw/images/2026-W35/excel-template.png"
+      imageAlt="Excel 模板样式"
+    >
+      当前问题集中在格式落地，不是内容生成本身。
+    </IssueRow>
+  </div>
+</Slide>
+
+{/* ========== 06 · 可复用资产 ========== */}
+<Slide variant="dark" tag="05" eyebrow="一期沉淀" title="沉淀了一项可迁移的能力资产">
+  <div class="slide-cols slide-cols--1-1">
+    <AssetHighlight
+      eyebrow="唯一可复用资产"
+      statement="不是泛化的「会生成 Word」，而是已摸清并沉淀了 officeCLI 的 Word 类调用规则。"
+      highlightPhrase="officeCLI 的 Word 类调用规则"
+    >
+      这套能力可迁移到其他有明确 Word 样式要求的材料，例如<mark class="asset-mark">软著、专利和公文</mark>。它是本期唯一被明确认定为可复用的能力资产。
+    </AssetHighlight>
+    <div>
+      <h3 style="font-family: var(--font-serif); font-weight: 500; font-size: 1.4rem; letter-spacing: -0.02em; color: white;">可复用的原因</h3>
+      <div style="margin-top: 1.5rem; display: grid; gap: 1rem;">
+        <div style="display: flex; gap: 1rem; color: rgb(255 255 255 / 0.75); font-size: 0.95rem; line-height: 1.6;">
+          <b style="color: rgb(var(--accent-mint)); font-family: var(--font-mono); font-weight: 700;">01</b>
+          <span>已完成 Word 类调用规则的系统摸索与沉淀。</span>
+        </div>
+        <div style="display: flex; gap: 1rem; color: rgb(255 255 255 / 0.75); font-size: 0.95rem; line-height: 1.6;">
+          <b style="color: rgb(var(--accent-mint)); font-family: var(--font-mono); font-weight: 700;">02</b>
+          <span>后续同类样式任务不必从零试错，可复用既有执行经验。</span>
+        </div>
+        <div style="display: flex; gap: 1rem; color: rgb(255 255 255 / 0.75); font-size: 0.95rem; line-height: 1.6;">
+          <b style="color: rgb(var(--accent-mint)); font-family: var(--font-mono); font-weight: 700;">03</b>
+          <span>其价值在于样式执行的可重复性，而不是所有 Office 载体均已成熟。</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <figure class="slide-evidence">
+    <button
+      type="button"
+      class="slide-evidence__figure"
+      data-lightbox-src="/GTM-Claw/images/2026-W35/word-cover-sample.png"
+      data-lightbox-alt="Word 产物样例：360AI 企业知识库产品解决方案封面与版权页"
+      aria-label="放大查看 Word 产物样例"
+    >
+      <img
+        src="/GTM-Claw/images/2026-W35/word-cover-sample.png"
+        alt="Word 产物样例：360AI 企业知识库产品解决方案封面与版权页"
+        loading="lazy"
+      />
+    </button>
+  </figure>
+</Slide>
+
+{/* ========== 07 · 二期规划 ========== */}
+<Slide
+  tag="06"
+  eyebrow="二期规划"
+  title="从「深度稳定」转向「广度扩展 + 精细化打磨」"
+  subtitle="材料类型覆盖已基本完成，二期继续围绕写、审、看三块能力扩容提质。"
+>
+  <div class="roadmap-grid">
+    <RoadmapColumn title="生成广度" summary="补齐目前最直接影响材料丰富度的能力。" primary>
+      <RoadmapItem label="Excel 模板遵循">形成与 Word 样式能力对应的 Excel 生成套路。</RoadmapItem>
+      <RoadmapItem label="架构图与图片生成">在文档中生成并插入架构图等配图。</RoadmapItem>
+      <RoadmapItem label="图片素材嵌入">将用户上传图片作为配图落到 Word 或 PPT。</RoadmapItem>
+      <RoadmapItem label="联网检索">在生成过程中实时获取外部信息。</RoadmapItem>
+    </RoadmapColumn>
+    <RoadmapColumn title="体验与交付" summary="减少下载本地后的二次处理成本。">
+      <RoadmapItem label="在线预览">生成后和审核时，页面可直接预览 Word、PPT、Excel。</RoadmapItem>
+      <RoadmapItem label="历史发布版本">支持保留、查看与下载历史材料版本。</RoadmapItem>
+      <RoadmapItem label="下架与撤回">让已发布材料具备基础的后续管理能力。</RoadmapItem>
+    </RoadmapColumn>
+    <RoadmapColumn title="质量与治理" summary="让流程与内容质量继续可控。">
+      <RoadmapItem label="直接人工审核">支持跳过 AI 审核进入人工审核流程。</RoadmapItem>
+      <RoadmapItem label="审核 Skill 优化">随测试样本增加，明确优化方向。</RoadmapItem>
+      <RoadmapItem label="撰写 Skill 优化">增强正文结构，降低机械化表达。</RoadmapItem>
+      <div slot="extra" class="roadmap-callout">
+        <b>仍需确认：</b>产品彩页为竖版 PPT，需评估 Word 竖版可行性与模板是否最新，再决定是否补齐最后 1 类。
+      </div>
+    </RoadmapColumn>
+  </div>
+</Slide>

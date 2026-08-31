@@ -1,0 +1,62 @@
+---
+export interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{items.length > 0 && (
+  <nav aria-label="页内目录" class="text-sm">
+    <p
+      class="mb-3 font-mono text-[11px] uppercase tracking-widest"
+      style="color: rgb(var(--text-subtle));"
+    >
+      本页目录
+    </p>
+    <ul id="toc-list" class="space-y-0.5">
+      {items.map((h) => (
+        <li>
+          <a
+            href={`#${h.slug}`}
+            class:list={['toc-link', h.depth === 3 && 'toc-h3']}
+            data-slug={h.slug}
+          >{h.text}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<script is:inline>
+  (function () {
+    const list = document.getElementById('toc-list');
+    if (!list) return;
+    const links = Array.from(list.querySelectorAll('a[data-slug]'));
+    const slugs = links.map((a) => a.getAttribute('data-slug'));
+    const targets = slugs.map((s) => (s ? document.getElementById(s) : null)).filter(Boolean);
+    if (targets.length === 0) return;
+
+    const setActive = (slug) => {
+      links.forEach((a) => a.setAttribute('data-active', a.getAttribute('data-slug') === slug ? 'true' : 'false'));
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.target.getBoundingClientRect().top - b.target.getBoundingClientRect().top);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      { rootMargin: '-80px 0px -70% 0px', threshold: [0, 1] }
+    );
+    targets.forEach((t) => observer.observe(t));
+  })();
+</script>

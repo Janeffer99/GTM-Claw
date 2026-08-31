@@ -1,0 +1,63 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource/instrument-serif';
+import '../styles/global.css';
+import '../styles/slides.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../consts';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const pageTitle = title ? `${title} · ${SITE.title}` : SITE.title;
+const pageDesc = description ?? SITE.description;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDesc} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FAFAFA" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#08090A" />
+
+    <!-- OG -->
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDesc} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+
+    <!-- Theme init (blocking, before paint) -->
+    <script is:inline>
+      (function () {
+        try {
+          const saved = localStorage.getItem('theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const dark = saved ? saved === 'dark' : prefersDark;
+          document.documentElement.classList.toggle('dark', dark);
+        } catch (_) {}
+        // Always start pages at the top on reload — no browser scroll restore.
+        try {
+          if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        } catch (_) {}
+        if (!location.hash) window.scrollTo(0, 0);
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen antialiased">
+    <Header />
+    <main class="mx-auto w-full">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

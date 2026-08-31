@@ -1,0 +1,61 @@
+---
+import type { MonthGroup } from '../lib/weeks';
+import { weekHref } from '../lib/weeks';
+
+interface Props {
+  groups: MonthGroup[];
+  currentSlug?: string;    // for detail page highlighting
+}
+
+const { groups, currentSlug } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<nav aria-label="周报目录" class="sidenav">
+  {groups.map((group) => (
+    <section class="mb-6">
+      <h4
+        class="mb-2 px-2 font-mono text-[11px] uppercase tracking-widest"
+        style="color: rgb(var(--text-subtle));"
+      >{group.label}</h4>
+      <ul class="space-y-0.5">
+        {group.entries.map((entry) => {
+          const slug = entry.id.replace(/\.mdx?$/, '');
+          const active = currentSlug === slug;
+          return (
+            <li>
+              <a
+                href={weekHref(entry, base)}
+                data-active={active ? 'true' : 'false'}
+                class="sidenav-link block rounded-md px-2 py-1.5 text-sm leading-snug transition"
+              >
+                <span class="block truncate">{entry.data.title}</span>
+                <span
+                  class="mt-0.5 block font-mono text-[10px]"
+                  style="color: rgb(var(--text-subtle));"
+                >{entry.data.week}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  ))}
+</nav>
+
+<style is:global>
+  .sidenav-link {
+    color: rgb(var(--text-muted));
+    border-left: 2px solid transparent;
+  }
+  .sidenav-link:hover {
+    color: rgb(var(--text));
+    background: rgb(var(--bg-elev));
+  }
+  .sidenav-link[data-active="true"] {
+    color: rgb(var(--text));
+    background: rgb(var(--bg-elev));
+    border-left-color: rgb(var(--text));
+    font-weight: 500;
+  }
+</style>

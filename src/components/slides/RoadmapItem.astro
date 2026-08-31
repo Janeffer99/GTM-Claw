@@ -1,0 +1,14 @@
+---
+/**
+ * RoadmapItem — one item inside a RoadmapColumn.
+ */
+export interface Props {
+  label: string;
+}
+const { label } = Astro.props;
+---
+
+<div class="roadmap-item">
+  <b>{label}</b>
+  <span><slot /></span>
+</div>

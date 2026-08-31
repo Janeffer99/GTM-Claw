@@ -1,0 +1,17 @@
+---
+/**
+ * MetricRow — a metric tile with big number + label.
+ */
+export interface Props {
+  value: string;
+  label: string;
+  featured?: boolean;
+  dark?: boolean;
+}
+const { value, label, featured = false, dark = false } = Astro.props;
+---
+
+<div class:list={['metric-row', { 'metric-row--featured': featured, 'metric-row--dark': dark }]}>
+  <div class="metric-row__value">{value}</div>
+  <div class="metric-row__label">{label}</div>
+</div>

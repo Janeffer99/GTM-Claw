@@ -1,0 +1,14 @@
+---
+/**
+ * CapListItem — one row inside CapabilityCard's list.
+ */
+export interface Props {
+  index: string;   // "01"
+}
+const { index } = Astro.props;
+---
+
+<div class="cap-item">
+  <b>{index}</b>
+  <span><slot /></span>
+</div>

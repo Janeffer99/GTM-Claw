@@ -1,0 +1,22 @@
+---
+/**
+ * RoadmapColumn — one column of the roadmap slide.
+ */
+export interface Props {
+  title: string;
+  summary: string;
+  primary?: boolean;
+}
+const { title, summary, primary = false } = Astro.props;
+---
+
+<article class:list={['roadmap-col', { 'roadmap-col--primary': primary }]}>
+  <h3>{title}</h3>
+  <p class="roadmap-col__summary">{summary}</p>
+  <div class="roadmap-col__items">
+    <slot />
+  </div>
+  <div class="roadmap-col__extra">
+    <slot name="extra" />
+  </div>
+</article>

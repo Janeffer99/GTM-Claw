@@ -1,0 +1,33 @@
+---
+/**
+ * AssetHighlight — a big featured statement card (used on the "asset" slide).
+ * Renders in dark surface style with a mint-highlighted em phrase.
+ */
+export interface Props {
+  eyebrow?: string;
+  statement: string;      // main statement text (use <em> for accent)
+  highlightPhrase?: string; // phrase to highlight in mint (matched in statement)
+}
+const { eyebrow, statement, highlightPhrase } = Astro.props;
+
+// Split statement around the highlight phrase so we can wrap it in <em>.
+let parts: Array<{ text: string; hi: boolean }> = [{ text: statement, hi: false }];
+if (highlightPhrase && statement.includes(highlightPhrase)) {
+  const [before, after] = statement.split(highlightPhrase);
+  parts = [
+    { text: before, hi: false },
+    { text: highlightPhrase, hi: true },
+    { text: after, hi: false },
+  ];
+}
+---
+
+<div class="asset-highlight">
+  {eyebrow && <div class="asset-highlight__eyebrow">{eyebrow}</div>}
+  <p class="asset-highlight__statement">
+    {parts.map((p) => (p.hi ? <em>{p.text}</em> : <span>{p.text}</span>))}
+  </p>
+  <div class="asset-highlight__note">
+    <slot />
+  </div>
+</div>

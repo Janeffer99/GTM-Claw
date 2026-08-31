@@ -1,0 +1,647 @@
+/* ============================================================
+ * Structured slide (deck-mode) component styles.
+ * Loaded globally so <Slide> and its children can render inside
+ * MDX articles regardless of Astro's per-component scoping.
+ * ============================================================ */
+
+/* ---------- Slide shell ---------- */
+.ppt-slide {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  min-height: 100vh;
+  padding: 4rem 5vw;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  position: relative;
+  background: rgb(var(--bg));
+  color: rgb(var(--text));
+}
+.ppt-slide--dark {
+  background: rgb(var(--slide-dark, 13 21 18));
+  color: rgb(245 246 247);
+}
+.ppt-slide__head { max-width: 1200px; margin: 0 auto; width: 100%; }
+.ppt-slide__body {
+  flex: 1;
+  max-width: 1200px;
+  width: 100%;
+  margin: 3rem auto 0;
+  min-height: 0;
+}
+.ppt-slide__body--no-pad { padding: 0; }
+.ppt-slide__foot { max-width: 1200px; margin: 2rem auto 0; width: 100%; }
+
+.ppt-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  color: rgb(var(--text-muted));
+}
+.ppt-slide--dark .ppt-eyebrow { color: rgb(255 255 255 / 0.62); }
+.ppt-tag {
+  min-width: 1.6rem;
+  height: 1.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.55rem;
+  border-radius: 0.5rem;
+  background: rgb(var(--accent-mint));
+  color: rgb(11 29 21);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  font-weight: 700;
+}
+.ppt-title {
+  margin-top: 1.1rem;
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: inherit;
+}
+.ppt-subtitle {
+  margin-top: 0.7rem;
+  max-width: 52em;
+  color: rgb(var(--text-muted));
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.ppt-slide--dark .ppt-subtitle { color: rgb(255 255 255 / 0.65); }
+
+/* ---------- Cover (fully custom, uses noPad) ---------- */
+.slide-cover-deck {
+  position: relative;
+  min-height: 100vh;
+  padding: 4rem 5vw;
+  display: flex;
+  align-items: center;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  background:
+    radial-gradient(circle at 77% 20%, rgb(105 214 162 / 0.22), transparent 30%),
+    radial-gradient(circle at 18% 92%, rgb(78 151 115 / 0.15), transparent 35%),
+    rgb(var(--slide-dark, 13 21 18));
+  color: white;
+  overflow: hidden;
+}
+.slide-cover-deck::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.2;
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.07) 1px, transparent 1px);
+  background-size: 54px 54px;
+  mask-image: linear-gradient(to bottom, black, transparent 82%);
+  pointer-events: none;
+}
+.slide-cover-deck__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+.slide-cover-deck__kicker {
+  color: rgb(255 255 255 / 0.55);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.slide-cover-deck__title {
+  margin-top: 1.6rem;
+  max-width: 22em;
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1.13;
+  letter-spacing: -0.03em;
+}
+.slide-cover-deck__title em {
+  color: rgb(var(--accent-mint));
+  font-style: normal;
+}
+.slide-cover-deck__desc {
+  margin-top: 1.6rem;
+  max-width: 38em;
+  color: rgb(255 255 255 / 0.68);
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+.slide-cover-deck__meta {
+  margin-top: 3rem;
+  display: flex;
+  gap: 1rem;
+  font-size: 0.85rem;
+  color: rgb(255 255 255 / 0.5);
+}
+.slide-cover-deck__meta span + span::before {
+  content: "·";
+  margin-right: 1rem;
+  color: rgb(255 255 255 / 0.3);
+}
+
+/* ---------- Capability grid (three-column) ---------- */
+.cap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+}
+@media (max-width: 900px) {
+  .cap-grid { grid-template-columns: 1fr; }
+}
+.cap-card {
+  position: relative;
+  overflow: hidden;
+  padding: 1.75rem;
+  border: 1px solid rgb(var(--border));
+  border-radius: 22px;
+  background: rgb(var(--bg-elev));
+  box-shadow: 0 1px 2px rgb(13 28 21 / 0.04), 0 12px 30px rgb(13 28 21 / 0.05);
+  display: flex;
+  flex-direction: column;
+}
+.cap-card--featured {
+  background: linear-gradient(155deg, rgb(var(--accent-mint-soft)), rgb(var(--bg-elev)) 60%);
+  border-color: rgb(var(--accent-mint-line));
+}
+/* Dark theme: replace the near-white gradient (which reads as blown-out
+   glare on a dark surface) with a subtle mint-tinted overlay on top of
+   the same elevated dark. */
+.dark .cap-card--featured,
+.ppt-slide--dark .cap-card--featured {
+  background:
+    linear-gradient(155deg, rgb(var(--accent-mint) / 0.12), transparent 65%),
+    rgb(var(--bg-elev));
+  border-color: rgb(var(--accent-mint) / 0.35);
+}
+.cap-card::after {
+  content: "";
+  position: absolute;
+  right: -60px;
+  bottom: -70px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(var(--accent-mint) / 0.16), transparent 65%);
+  pointer-events: none;
+}
+.cap-card__num {
+  color: rgb(var(--accent-mint-deep));
+  font-family: var(--font-mono);
+  font-weight: 750;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+}
+.cap-card__title {
+  margin-top: 1rem;
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 1.55rem;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: rgb(var(--text));
+}
+.cap-card__summary {
+  margin-top: 0.7rem;
+  color: rgb(var(--text-muted));
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+.cap-card__kpi {
+  margin-top: 1.8rem;
+  color: rgb(var(--text));
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 3rem;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.cap-card__kpi small {
+  margin-left: 0.3rem;
+  color: rgb(var(--accent-mint-deep));
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.cap-card__list { margin-top: 1.5rem; display: grid; gap: 0.65rem; }
+.cap-item {
+  display: flex;
+  gap: 0.6rem;
+  color: rgb(var(--text-muted));
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.cap-item b {
+  color: rgb(var(--accent-mint-deep));
+  font-family: var(--font-mono);
+  font-weight: 700;
+  min-width: 1.5rem;
+}
+
+/* ---------- Slide evidence figure (product screenshot band) ---------- */
+.slide-evidence {
+  margin-top: 2rem;
+}
+.slide-evidence__figure {
+  position: relative;
+  padding: 0;
+  width: 100%;
+  border: 1px solid rgb(var(--border));
+  border-radius: 16px;
+  background: rgb(var(--bg-elev));
+  overflow: hidden;
+  cursor: zoom-in;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s;
+  max-height: 280px;
+  display: block;
+}
+.slide-evidence__figure:hover {
+  transform: translateY(-2px);
+  border-color: rgb(var(--accent-mint-deep));
+}
+.slide-evidence__figure img {
+  display: block;
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  object-position: top center;
+}
+.ppt-slide--dark .slide-evidence__figure {
+  border-color: rgb(var(--accent-mint) / 0.3);
+}
+.slide-evidence__figure::after {
+  content: "🔍 点击放大";
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.65);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.2s;
+  backdrop-filter: blur(6px);
+}
+.slide-evidence__figure:hover::after { opacity: 1; }
+
+/* ---------- Metric rows (used on results slides) ---------- */
+.metric-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+.metric-grid.metric-grid--3 { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 640px) {
+  .metric-grid.metric-grid--3 { grid-template-columns: 1fr; }
+}
+.metric-row {
+  padding: 1.2rem;
+  border: 1px solid rgb(var(--border));
+  border-radius: 16px;
+  background: rgb(var(--bg-elev));
+}
+.metric-row--featured {
+  background: linear-gradient(140deg, rgb(var(--accent-mint-soft)), rgb(var(--bg-elev)) 72%);
+  border-color: rgb(var(--accent-mint-line));
+}
+.dark .metric-row--featured,
+.ppt-slide--dark .metric-row--featured {
+  background:
+    linear-gradient(140deg, rgb(var(--accent-mint) / 0.14), transparent 70%),
+    rgb(var(--bg-elev));
+  border-color: rgb(var(--accent-mint) / 0.35);
+}
+.metric-row--dark {
+  background: rgb(255 255 255 / 0.055);
+  border-color: rgb(255 255 255 / 0.12);
+  color: white;
+}
+.metric-row__value {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 1.9rem;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.metric-row--dark .metric-row__value { color: rgb(var(--accent-mint)); }
+.metric-row__label {
+  margin-top: 0.55rem;
+  color: rgb(var(--text-muted));
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+.metric-row--dark .metric-row__label { color: rgb(255 255 255 / 0.6); }
+
+/* ---------- Issue rows (used on gaps slide) ---------- */
+.issue-list {
+  display: grid;
+  gap: 0.75rem;
+}
+.issue-row {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgb(var(--border));
+  border-radius: 14px;
+  background: rgb(var(--bg-elev));
+}
+.issue-row__prio {
+  align-self: start;
+  padding: 0.3rem 0.55rem;
+  border-radius: 7px;
+  background: rgb(243 245 244);
+  color: rgb(80 96 87);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: center;
+}
+.issue-row__prio--high {
+  background: rgb(var(--warn-soft));
+  color: rgb(187 97 28);
+}
+.issue-row__body h4 {
+  font-size: 1rem;
+  line-height: 1.35;
+  font-weight: 600;
+}
+.issue-row__body p {
+  margin-top: 0.25rem;
+  color: rgb(var(--text-muted));
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+.issue-row__arrow {
+  color: rgb(var(--accent-mint-deep));
+  font-size: 1.3rem;
+}
+.issue-row__thumb {
+  width: 80px;
+  height: 60px;
+  padding: 0;
+  border: 1px solid rgb(var(--border));
+  border-radius: 8px;
+  background: rgb(var(--bg));
+  overflow: hidden;
+  cursor: zoom-in;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.issue-row__thumb:hover {
+  transform: scale(1.05);
+  border-color: rgb(var(--accent-mint-deep));
+}
+.issue-row__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Lightbox overlay for enlarged thumbnails */
+.deck-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgb(0 0 0 / 0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  cursor: zoom-out;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.deck-lightbox[data-open="true"] {
+  display: flex;
+  opacity: 1;
+}
+.deck-lightbox img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgb(0 0 0 / 0.5);
+}
+.deck-lightbox__close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 1px solid rgb(255 255 255 / 0.3);
+  background: rgb(0 0 0 / 0.5);
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.deck-lightbox__close:hover {
+  background: rgb(0 0 0 / 0.7);
+  border-color: rgb(255 255 255 / 0.5);
+}
+
+/* ---------- Two-column layouts used inside slides ---------- */
+.slide-cols {
+  display: grid;
+  gap: 1.5rem;
+  height: 100%;
+}
+.slide-cols--1-1 { grid-template-columns: 1fr 1fr; }
+.slide-cols--3-2 { grid-template-columns: 3fr 2fr; }
+.slide-cols--2-3 { grid-template-columns: 2fr 3fr; }
+@media (max-width: 900px) {
+  .slide-cols { grid-template-columns: 1fr !important; }
+}
+
+/* ---------- Note card (used inside two-column layouts) ---------- */
+.note-card {
+  padding: 1.4rem;
+  border: 1px solid rgb(var(--border));
+  border-radius: 18px;
+  background: rgb(var(--bg-elev));
+}
+.note-card h4 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+}
+.note-card p {
+  margin-top: 0.6rem;
+  color: rgb(var(--text-muted));
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.note-card__mini {
+  display: inline-flex;
+  margin-bottom: 0.7rem;
+  padding: 0.28rem 0.55rem;
+  border-radius: 6px;
+  background: rgb(var(--accent-mint-soft));
+  color: rgb(var(--accent-mint-deep));
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.02em;
+}
+
+/* ---------- Dark statement panel (used on results slide) ---------- */
+.dark-panel {
+  padding: 1.8rem;
+  border-radius: 22px;
+  background: rgb(var(--slide-dark-2, 20 35 29));
+  color: white;
+  height: 100%;
+}
+.dark-panel__label {
+  color: rgb(255 255 255 / 0.5);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+}
+.dark-panel__title {
+  margin-top: 1rem;
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 1.7rem;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+}
+.dark-panel__title em {
+  color: rgb(var(--accent-mint));
+  font-style: normal;
+}
+
+/* ---------- Asset highlight (dark statement slide) ---------- */
+.asset-highlight {
+  display: grid;
+  gap: 1.5rem;
+}
+.asset-highlight__eyebrow {
+  color: rgb(255 255 255 / 0.5);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+}
+.asset-highlight__statement {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: white;
+}
+.asset-highlight__statement em {
+  color: rgb(var(--accent-mint));
+  font-style: normal;
+}
+.asset-highlight__note {
+  color: rgb(255 255 255 / 0.7);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+/* Inline emphasis for key phrases inside the asset note. */
+.asset-mark {
+  background: transparent;
+  color: rgb(var(--accent-mint));
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgb(var(--accent-mint) / 0.7);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  padding: 0 0.15em;
+}
+
+/* ---------- Roadmap columns ---------- */
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+}
+@media (max-width: 900px) {
+  .roadmap-grid { grid-template-columns: 1fr; }
+}
+.roadmap-col {
+  padding: 1.5rem;
+  border: 1px solid rgb(var(--border));
+  border-radius: 20px;
+  background: rgb(var(--bg-elev));
+  display: flex;
+  flex-direction: column;
+}
+.roadmap-col--primary {
+  background: linear-gradient(155deg, rgb(var(--accent-mint-soft)), rgb(var(--bg-elev)) 60%);
+  border-color: rgb(var(--accent-mint-line));
+}
+.dark .roadmap-col--primary,
+.ppt-slide--dark .roadmap-col--primary {
+  background:
+    linear-gradient(155deg, rgb(var(--accent-mint) / 0.12), transparent 65%),
+    rgb(var(--bg-elev));
+  border-color: rgb(var(--accent-mint) / 0.35);
+}
+.roadmap-col h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+}
+.roadmap-col__summary {
+  margin-top: 0.6rem;
+  color: rgb(var(--text-muted));
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+.roadmap-col__items {
+  margin-top: 1.25rem;
+  display: grid;
+  gap: 0.9rem;
+}
+.roadmap-item b {
+  display: block;
+  color: rgb(var(--text));
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding-top: 0.7rem;
+  border-top: 1px solid rgb(var(--border));
+}
+.roadmap-item:first-child b { padding-top: 0; border-top: none; }
+.roadmap-item span {
+  display: block;
+  margin-top: 0.3rem;
+  color: rgb(var(--text-muted));
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+.roadmap-col__extra { margin-top: auto; padding-top: 1rem; }
+.roadmap-callout {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background: rgb(var(--slide-dark, 13 21 18));
+  color: rgb(245 246 247);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.roadmap-callout b {
+  color: rgb(var(--accent-mint));
+  font-weight: 700;
+}

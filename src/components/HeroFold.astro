@@ -1,0 +1,123 @@
+---
+/**
+ * HeroFold — a 3D fold-in title, driven by GSAP.
+ *
+ * Structure:
+ *   .hero-fold
+ *     .hero-fold-visual         (visible layer, aria-hidden)
+ *       .hero-fold-word (× N)   (a container that establishes 3D perspective)
+ *         .hero-fold-panel      (the actual rotating panel, hinged at the top)
+ *     .hero-fold-sr             (a11y-only readable text)
+ *
+ * The panel starts rotated -92deg on X (folded away toward the top). GSAP
+ * animates it back to 0deg with a stagger so words unfold in sequence.
+ *
+ * The client-side wiring lives in src/scripts/hero-fold.ts.
+ */
+export interface Props {
+  /** The heading text to render. */
+  text: string;
+  /** Extra classes on the root <span>. */
+  class?: string;
+}
+
+const { text, class: className = '' } = Astro.props;
+
+// Split into individual graphemes (correctly handling CJK chars & emoji),
+// while preserving whitespace as separate non-folding tokens.
+function segment(input: string): string[] {
+  const parts: string[] = [];
+  const re = /(\s+)/;
+  const chunks = input.split(re).filter((c) => c.length > 0);
+
+  const hasSegmenter = typeof Intl !== 'undefined' && 'Segmenter' in Intl;
+  const graphemesOf = (s: string): string[] => {
+    if (hasSegmenter) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const seg = new (Intl as any).Segmenter(undefined, { granularity: 'grapheme' });
+      return Array.from(seg.segment(s), (x: any) => x.segment as string);
+    }
+    return Array.from(s);
+  };
+
+  for (const chunk of chunks) {
+    if (/^\s+$/.test(chunk)) {
+      parts.push(chunk);
+    } else {
+      for (const g of graphemesOf(chunk)) parts.push(g);
+    }
+  }
+  return parts;
+}
+
+const tokens = segment(text);
+---
+
+<span class:list={['hero-fold', className]}>
+  <span class="hero-fold-sr">{text}</span>
+  <span class="hero-fold-visual" aria-hidden="true">
+    {tokens.map((token) =>
+      /^\s+$/.test(token) ? (
+        <span class="hero-fold-space">{token.replace(/ /g, ' ')}</span>
+      ) : (
+        <span class="hero-fold-word">
+          <span class="hero-fold-panel">{token}</span>
+        </span>
+      )
+    )}
+  </span>
+</span>
+
+<style is:global>
+  .hero-fold {
+    display: inline-block;
+    color: inherit;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .hero-fold-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .hero-fold-visual {
+    display: inline;
+  }
+  .hero-fold-space {
+    display: inline;
+    white-space: pre;
+  }
+  .hero-fold-word {
+    display: inline-block;
+    perspective: 700px;
+    transform-style: preserve-3d;
+    vertical-align: baseline;
+    line-height: inherit;
+  }
+  .hero-fold-panel {
+    display: inline-block;
+    color: inherit;
+    line-height: inherit;
+    transform-origin: 50% 0%;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+    /* Initial folded state — GSAP will animate to rotateX(0). Kept here so
+       the panels aren't visible in a flat state before JS runs. */
+    opacity: 0;
+    transform: rotateX(-92deg);
+  }
+  /* When reduced-motion is set, show the text flat with no fold. */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-fold-panel {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+</style>

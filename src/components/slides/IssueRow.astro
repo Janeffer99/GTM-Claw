@@ -1,0 +1,36 @@
+---
+/**
+ * IssueRow — one problem row on the "gaps" slide.
+ * Optionally shows a small thumbnail on the right that opens a full-size
+ * lightbox when clicked.
+ */
+export interface Props {
+  priority: 'high' | 'mid' | 'low';
+  title: string;
+  image?: string;      // optional image URL
+  imageAlt?: string;
+}
+const { priority, title, image, imageAlt } = Astro.props;
+const label = { high: '高优先级', mid: '中优先级', low: '低优先级' }[priority];
+---
+
+<article class="issue-row">
+  <span class:list={['issue-row__prio', `issue-row__prio--${priority}`]}>{label}</span>
+  <div class="issue-row__body">
+    <h4>{title}</h4>
+    <p><slot /></p>
+  </div>
+  {image ? (
+    <button
+      type="button"
+      class="issue-row__thumb"
+      data-lightbox-src={image}
+      data-lightbox-alt={imageAlt ?? title}
+      aria-label={`查看 ${title} 详细截图`}
+    >
+      <img src={image} alt={imageAlt ?? title} loading="lazy" />
+    </button>
+  ) : (
+    <span class="issue-row__arrow" aria-hidden="true">›</span>
+  )}
+</article>

@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroTiles from '../components/HeroTiles.astro';
+import HeroFold from '../components/HeroFold.astro';
+import WeekCard from '../components/WeekCard.astro';
+import { SITE } from '../consts';
+import { getWeeks } from '../lib/weeks';
+
+const weeks = await getWeeks();
+const latest = weeks[0];
+---
+
+<BaseLayout>
+  <!-- ▶ First screen: Hero -->
+  <section
+    class="hero-scroll relative flex min-h-[calc(100vh-3.5rem)] w-full flex-col items-stretch justify-center overflow-hidden"
+  >
+    <HeroTiles tile={56} class="hero-tiles-bg" />
+
+    <div class="hero-content relative z-10 mx-auto flex w-full max-w-[1360px] flex-col items-start px-5 md:px-8">
+      <p
+        class="mb-5 font-mono text-xs uppercase tracking-[0.2em]"
+        style="color: rgb(var(--text-subtle));"
+      >
+        Weekly Progress · 2026
+      </p>
+      <h1
+        class="hero-title max-w-4xl text-6xl font-normal leading-[1.02] tracking-tight md:text-8xl"
+        style="color: rgb(var(--text));"
+      >
+        <HeroFold text={SITE.title} />
+      </h1>
+      <p
+        class="mt-6 max-w-2xl text-base leading-relaxed md:text-lg"
+        style="color: rgb(var(--text-muted));"
+      >
+        {SITE.description}
+      </p>
+
+      <div class="mt-10 flex items-center gap-4">
+        <a
+          href="#archive"
+          class="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition hover:opacity-85"
+          style="background: rgb(var(--accent)); color: rgb(var(--accent-fg));"
+        >
+          浏览全部周报
+          <span aria-hidden="true">↓</span>
+        </a>
+        {latest && (
+          <span class="font-mono text-xs" style="color: rgb(var(--text-subtle));">
+            最新 · {latest.data.week}
+          </span>
+        )}
+      </div>
+    </div>
+
+    <div
+      class="pointer-events-none absolute bottom-8 left-1/2 z-10 -translate-x-1/2 animate-bounce text-xs"
+      style="color: rgb(var(--text-subtle));"
+      aria-hidden="true"
+    >
+      ↓
+    </div>
+  </section>
+
+  <!-- ▶ Second screen: archive (cards only) -->
+  <div id="archive" class="reveal mx-auto max-w-[1360px] px-5 pt-8 pb-24 md:px-8 md:pt-16">
+    <div
+      class="mb-8 flex items-baseline justify-between"
+      style="border-bottom: 1px solid rgb(var(--border)); padding-bottom: 1rem;"
+    >
+      <h2
+        class="text-sm font-medium uppercase tracking-widest"
+        style="color: rgb(var(--text-muted));"
+      >全部周报</h2>
+      <span class="font-mono text-xs" style="color: rgb(var(--text-subtle));">
+        {weeks.length} entries
+      </span>
+    </div>
+
+    {weeks.length === 0 ? (
+      <p style="color: rgb(var(--text-muted));">还没有周报，敬请期待。</p>
+    ) : (
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {weeks.map((entry) => <WeekCard entry={entry} />)}
+      </div>
+    )}
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  /* Hero fade — write scroll progress into a CSS variable. */
+  (function () {
+    const hero = document.querySelector('.hero-scroll');
+    if (!hero) return;
+    let ticking = false;
+    const update = () => {
+      const rect = hero.getBoundingClientRect();
+      const height = rect.height || 1;
+      const scrolled = Math.max(0, -rect.top);
+      const progress = Math.min(1, scrolled / (height * 0.8));
+      hero.style.setProperty('--hero-progress', String(progress));
+      ticking = false;
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+  })();
+</script>
+
+<script>
+  import { initRevealOnScroll } from '../scripts/reveal-on-scroll';
+  import { initHeroFold } from '../scripts/hero-fold';
+  import { initCardSpotlight } from '../scripts/card-spotlight';
+  initRevealOnScroll();
+  initHeroFold();
+  initCardSpotlight();
+</script>

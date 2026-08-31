@@ -1,0 +1,61 @@
+---
+/**
+ * Slide — the outer shell for one slide in a structured deck MDX.
+ * When .deck-source contains <Slide> elements, the deck.ts script skips
+ * the automatic H2-slice mode and instead uses the pre-built <section>
+ * elements directly.
+ *
+ * Props:
+ *   variant  "light" | "dark"   default "light"
+ *   tag      string             eyebrow tag number, e.g. "01"
+ *   eyebrow  string             label next to the tag
+ *   title    string             main heading
+ *   subtitle string             optional subtitle below the heading
+ *   noPad    boolean            remove default content padding (for full-bleed layouts)
+ */
+export interface Props {
+  variant?: 'light' | 'dark';
+  tag?: string;
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+  noPad?: boolean;
+  class?: string;
+}
+
+const {
+  variant = 'light',
+  tag,
+  eyebrow,
+  title,
+  subtitle,
+  noPad = false,
+  class: className = '',
+} = Astro.props;
+---
+
+<section class:list={['ppt-slide', `ppt-slide--${variant}`, className]}>
+  <!-- header -->
+  {(tag || eyebrow || title || subtitle) && (
+    <header class="ppt-slide__head">
+      {(tag || eyebrow) && (
+        <div class="ppt-eyebrow">
+          {tag && <span class="ppt-tag">{tag}</span>}
+          {eyebrow && <span>{eyebrow}</span>}
+        </div>
+      )}
+      {title && <h2 class="ppt-title">{title}</h2>}
+      {subtitle && <p class="ppt-subtitle">{subtitle}</p>}
+    </header>
+  )}
+
+  <!-- content slot -->
+  <div class:list={['ppt-slide__body', { 'ppt-slide__body--no-pad': noPad }]}>
+    <slot />
+  </div>
+
+  <!-- footer slot (optional override) -->
+  <footer class="ppt-slide__foot">
+    <slot name="footer" />
+  </footer>
+</section>
