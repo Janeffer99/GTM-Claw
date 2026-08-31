@@ -346,31 +346,41 @@
 /* ---------- Issue rows (used on gaps slide) ---------- */
 .issue-list {
   display: grid;
-  gap: 0.75rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+@media (max-width: 900px) {
+  .issue-list { grid-template-columns: 1fr; }
 }
 .issue-row {
   display: grid;
-  grid-template-columns: 5.5rem 1fr auto;
+  grid-template-columns: 1fr 220px;
   gap: 1rem;
-  align-items: center;
-  padding: 1rem 1.25rem;
+  align-items: stretch;
+  padding: 1.1rem 1.25rem;
   border: 1px solid rgb(var(--border));
   border-radius: 14px;
   background: rgb(var(--bg-elev));
 }
 .issue-row__prio {
-  align-self: start;
-  padding: 0.3rem 0.55rem;
+  display: inline-block;
+  padding: 0.28rem 0.55rem;
   border-radius: 7px;
   background: rgb(243 245 244);
   color: rgb(80 96 87);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 700;
   text-align: center;
+  align-self: flex-start;
+  margin-bottom: 0.5rem;
 }
 .issue-row__prio--high {
   background: rgb(var(--warn-soft));
   color: rgb(187 97 28);
+}
+.issue-row__body {
+  display: flex;
+  flex-direction: column;
 }
 .issue-row__body h4 {
   font-size: 1rem;
@@ -378,35 +388,53 @@
   font-weight: 600;
 }
 .issue-row__body p {
-  margin-top: 0.25rem;
+  margin-top: 0.4rem;
   color: rgb(var(--text-muted));
   font-size: 0.82rem;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 .issue-row__arrow {
   color: rgb(var(--accent-mint-deep));
   font-size: 1.3rem;
+  align-self: center;
 }
 .issue-row__thumb {
-  width: 80px;
-  height: 60px;
+  width: 220px;
+  height: 140px;
   padding: 0;
   border: 1px solid rgb(var(--border));
-  border-radius: 8px;
+  border-radius: 10px;
   background: rgb(var(--bg));
   overflow: hidden;
   cursor: zoom-in;
   transition: transform 0.2s, border-color 0.2s;
+  align-self: center;
+  justify-self: end;
 }
 .issue-row__thumb:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
   border-color: rgb(var(--accent-mint-deep));
 }
 .issue-row__thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
+}
+/* Dark-slide variant */
+.ppt-slide--dark .issue-row__thumb {
+  border-color: rgb(var(--accent-mint) / 0.3);
+}
+@media (max-width: 640px) {
+  .issue-row {
+    grid-template-columns: 1fr;
+  }
+  .issue-row__thumb {
+    width: 100%;
+    height: 160px;
+    justify-self: stretch;
+  }
 }
 
 /* Lightbox overlay for enlarged thumbnails */

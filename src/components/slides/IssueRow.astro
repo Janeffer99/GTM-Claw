@@ -15,8 +15,8 @@ const label = { high: '高优先级', mid: '中优先级', low: '低优先级' }
 ---
 
 <article class="issue-row">
-  <span class:list={['issue-row__prio', `issue-row__prio--${priority}`]}>{label}</span>
   <div class="issue-row__body">
+    <span class:list={['issue-row__prio', `issue-row__prio--${priority}`]}>{label}</span>
     <h4>{title}</h4>
     <p><slot /></p>
   </div>
