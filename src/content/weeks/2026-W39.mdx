@@ -1,0 +1,241 @@
+---
+title: "2026-09-29"
+week: "2026-W39"
+date: 2026-09-29
+summary: "二期用户反馈验证：生成能力实现，PPT 可用性待提升，需扩展材料覆盖与累积业务知识。"
+tags: ["用户访谈", "方案生成", "问题梳理"]
+---
+
+import Slide from '../../components/slides/Slide.astro';
+import CapabilityCard from '../../components/slides/CapabilityCard.astro';
+import CapListItem from '../../components/slides/CapListItem.astro';
+import MetricRow from '../../components/slides/MetricRow.astro';
+import IssueRow from '../../components/slides/IssueRow.astro';
+import RoadmapColumn from '../../components/slides/RoadmapColumn.astro';
+import RoadmapItem from '../../components/slides/RoadmapItem.astro';
+import HeroFold from '../../components/HeroFold.astro';
+
+{/* ========== 01 · 封面 ========== */}
+<section class="slide-cover-deck">
+  <div class="slide-cover-deck__inner">
+    <div class="slide-cover-deck__kicker">GTM · 二期进展汇报</div>
+    <h1 class="slide-cover-deck__title">
+      <HeroFold text="智效 GTM · 二期用户验证与优化方向" />
+    </h1>
+    <p class="slide-cover-deck__desc">
+      解决方案生成能力已实现，用户认可 Word、Excel 内容生成。但三个关键问题仍需重点解决：持续使用不足、PPT 可用性较低、多产线融合所需业务知识缺失。
+    </p>
+    <div class="slide-cover-deck__meta">
+      <span>2026-09-29</span>
+      <span>2026-W39</span>
+    </div>
+  </div>
+</section>
+
+{/* ========== 02 · 一句话结论 ========== */}
+<Slide
+  tag="01"
+  eyebrow="一句话结论"
+  title="生成能力已交付，关键在于提升体验与拓展覆盖"
+  subtitle="Word、Excel 生成获用户认可，PPT 质量仍需优化；需扩展材料覆盖范围并积累多产线融合的业务知识。"
+>
+  <div class="slide-cols slide-cols--3-2">
+    <div>
+      <div class="dark-panel">
+        <div class="dark-panel__label">当前阶段</div>
+        <div class="dark-panel__title">
+          解决方案生成核心能力已实现，<em>后续重点在优化 PPT、扩展覆盖、积累知识。</em>
+        </div>
+      </div>
+    </div>
+    <div class="metric-grid" style="grid-template-columns: 1fr;">
+      <MetricRow value="已实现" label="方案生成能力" featured />
+      <MetricRow value="Word、Excel" label="获用户认可的载体" />
+      <MetricRow value="3 项" label="需重点解决的问题" />
+    </div>
+  </div>
+</Slide>
+
+{/* ========== 03 · 整体情况 ========== */}
+<Slide
+  tag="02"
+  eyebrow="整体情况"
+  title="生成能力实现，但仍需突破三个关键瓶颈"
+  subtitle="在智慧云相关访谈中获得了第一手反馈，梳理出下一步的优化方向。"
+>
+  <div style="display: grid; gap: 1.5rem;">
+    <div class="note-card">
+      <span class="note-card__mini">用户反馈</span>
+      <h4>Word、Excel 内容生成获普遍认可</h4>
+      <p>受访用户对文档类内容生成的质量与效率表示满意，认为能够满足基本使用需求。</p>
+    </div>
+    <div class="note-card">
+      <span class="note-card__mini">关键瓶颈 #1</span>
+      <h4>PPT 可用性较低</h4>
+      <p>对比用户手工制作的 PPT，主要差距在于文字过多、图文表达不足，以及页数偏少、内容展开不充分。固定的大纲限制了内容展开和页数。</p>
+    </div>
+    <div class="note-card">
+      <span class="note-card__mini">关键瓶颈 #2</span>
+      <h4>持续使用不足</h4>
+      <p>大多数用户仍停留在试用阶段，尚未形成持续使用。临近假期、缺少实际任务需求可能是影响因素，需结合用户业务周期进一步确认。</p>
+    </div>
+    <div class="note-card">
+      <span class="note-card__mini">关键瓶颈 #3</span>
+      <h4>多产线融合所需业务知识缺失</h4>
+      <p>生成的方案组合缺乏隐性业务知识支撑，影响方案的合理性和完整性。需系统积累跨产线的知识与经验。</p>
+    </div>
+  </div>
+</Slide>
+
+{/* ========== 04 · 用户使用情况 ========== */}
+<Slide
+  tag="03"
+  eyebrow="用户使用情况"
+  title="大多数用户停留在试用阶段，未形成持续使用"
+  subtitle="PPT 质量是核心问题，固定大纲限制了内容的灵活展开。"
+>
+  <div class="slide-cols slide-cols--1-1">
+    <div>
+      <h3 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem;">使用现状</h3>
+      <ul style="list-style: none; padding: 0; display: grid; gap: 0.75rem;">
+        <li style="display: flex; gap: 0.75rem;">
+          <span style="flex-shrink: 0; color: rgb(var(--accent-mint)); font-weight: 700;">•</span>
+          <span>大多数用户仍停留在试用阶段</span>
+        </li>
+        <li style="display: flex; gap: 0.75rem;">
+          <span style="flex-shrink: 0; color: rgb(var(--accent-mint)); font-weight: 700;">•</span>
+          <span>尚未形成持续使用的习惯与流程</span>
+        </li>
+        <li style="display: flex; gap: 0.75rem;">
+          <span style="flex-shrink: 0; color: rgb(var(--accent-mint)); font-weight: 700;">•</span>
+          <span>临近假期、缺少实际任务需求可能是影响因素</span>
+        </li>
+        <li style="display: flex; gap: 0.75rem;">
+          <span style="flex-shrink: 0; color: rgb(var(--accent-mint)); font-weight: 700;">•</span>
+          <span>需进一步回访确认与业务周期的关系</span>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem;">PPT 质量差距分析</h3>
+      <ul style="list-style: none; padding: 0; display: grid; gap: 0.75rem;">
+        <li style="display: flex; gap: 0.75rem;">
+          <span style="flex-shrink: 0; color: #d1443a; font-weight: 700;">✕</span>
+          <span><b>文字过多</b>，缺乏视觉化表达</span>
+        </li>
+        <li style="display: flex; gap: 0.75rem;">
+          <span style="flex-shrink: 0; color: #d1443a; font-weight: 700;">✕</span>
+          <span><b>页数偏少</b>，内容展开不充分</span>
+        </li>
+        <li style="display: flex; gap: 0.75rem;">
+          <span style="flex-shrink: 0; color: #d1443a; font-weight: 700;">✕</span>
+          <span><b>固定大纲限制</b>了灵活的内容组织</span>
+        </li>
+        <li style="display: flex; gap: 0.75rem;">
+          <span style="flex-shrink: 0; color: rgb(var(--accent-mint)); font-weight: 700;">→</span>
+          <span>不仅需增加页数，更需改善整体质量</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</Slide>
+
+{/* ========== 05 · 推广情况 ========== */}
+<Slide
+  tag="04"
+  eyebrow="推广情况"
+  title="政企是匹配度最高的受众，但推进缓慢"
+  subtitle="需深入理解政企协作流程，找到最合适的切入点与推广方式。"
+>
+  <div class="slide-cols slide-cols--3-2">
+    <div class="dark-panel">
+      <div class="dark-panel__label">当前推广状况</div>
+      <div class="dark-panel__title">
+        与平台定位最匹配的受众集中在<em>政企和数智领域。</em>
+      </div>
+      <div style="margin-top: 1.5rem; color: rgb(255 255 255 / 0.75); font-size: 0.95rem; line-height: 1.6;">
+        <p>政企侧推进相对缓慢，可能与当前需求时点、自下而上的推广方式有关。</p>
+      </div>
+    </div>
+    <div style="display: grid; gap: 1rem;">
+      <div class="note-card">
+        <span class="note-card__mini">核心困境</span>
+        <h4>缺乏对政企内部流程的深入理解</h4>
+        <p>需进一步明确：谁是实际使用者，谁是业务推动者，如何找到最合适的工作节点切入。</p>
+      </div>
+      <div class="note-card">
+        <span class="note-card__mini">下一步</span>
+        <h4>针对性梳理推广路径与试点机制</h4>
+        <p>与熟悉政企业务的同事协作，制定更有针对性的推广策略。</p>
+      </div>
+    </div>
+  </div>
+</Slide>
+
+{/* ========== 06 · 产品进展与迭代方向 ========== */}
+<Slide
+  tag="05"
+  eyebrow="产品进展"
+  title="两个方向的迭代将直接提升产品竞争力"
+  subtitle="先解决现有场景的质量问题，再逐步扩大覆盖范围。同步补充知识资产。"
+>
+  <div class="roadmap-grid">
+    <RoadmapColumn title="提升 PPT 可用性" summary="放开固定大纲限制，提升内容质量与视觉表达。" primary>
+      <RoadmapItem label="放开固定大纲限制">让页数和结构随内容需要灵活调整。</RoadmapItem>
+      <RoadmapItem label="改善文字密度">减少文字，增加图文表达。</RoadmapItem>
+      <RoadmapItem label="丰富内容展开">支持更充分的论述与案例展示。</RoadmapItem>
+      <RoadmapItem label="对标手工质量">逐步接近用户手工制作的 PPT 质量水平。</RoadmapItem>
+    </RoadmapColumn>
+    <RoadmapColumn title="拓展材料覆盖" summary="从 24 类延伸到解决方案全场景。">
+      <RoadmapItem label="覆盖全阶段">意向、初设、详设等各个方案阶段。</RoadmapItem>
+      <RoadmapItem label="扩展材料类型">逐步延伸到更多的实际业务场景。</RoadmapItem>
+      <RoadmapItem label="真实项目验证">结合真实需求验证生成效果。</RoadmapItem>
+      <RoadmapItem label="优化迭代循环">基于反馈持续调整与改进。</RoadmapItem>
+    </RoadmapColumn>
+    <RoadmapColumn title="知识积累与优化" summary="补充业务知识，改善多产线融合。">
+      <RoadmapItem label="累积典型案例">收集整理跨产线的实际成功案例。</RoadmapItem>
+      <RoadmapItem label="引入专家经验">与业务专家合作，提炼融合规则。</RoadmapItem>
+      <RoadmapItem label="优化生成逻辑">基于知识反馈改进方案组合能力。</RoadmapItem>
+      <div slot="extra" class="roadmap-callout">
+        <b>优先级：</b>先解决现有场景的关键质量问题，再逐步扩大覆盖范围。
+      </div>
+    </RoadmapColumn>
+  </div>
+</Slide>
+
+{/* ========== 07 · 需要的支持 ========== */}
+<Slide
+  tag="06"
+  eyebrow="需要的支持"
+  title="需要两个维度的协作支持才能加速推进"
+  subtitle="政企推广与产品优化都需要跨部门的深度合作。"
+>
+  <div class="slide-cols slide-cols--1-1">
+    <div>
+      <h3 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: rgb(var(--accent-mint-deep));">推广路径梳理</h3>
+      <div style="display: grid; gap: 1rem;">
+        <div style="padding: 1rem; border-left: 3px solid rgb(var(--accent-mint)); background: rgb(var(--accent-mint-soft)); border-radius: 0.5rem;">
+          <p style="font-weight: 600; margin: 0 0 0.5rem 0;">协调政企业务专家</p>
+          <p style="font-size: 0.95rem; color: rgb(var(--text-muted)); margin: 0;">梳理政企内部协作流程、确认实际使用者与业务推动者、明确最合适的切入工作节点。</p>
+        </div>
+        <div style="padding: 1rem; border-left: 3px solid rgb(var(--accent-mint)); background: rgb(var(--accent-mint-soft)); border-radius: 0.5rem;">
+          <p style="font-weight: 600; margin: 0 0 0.5rem 0;">对接具体项目试点</p>
+          <p style="font-size: 0.95rem; color: rgb(var(--text-muted)); margin: 0;">寻找有明确材料需求的项目，组织小范围试点验证生成效果与推广可行性。</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h3 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: rgb(var(--accent-mint-deep));">产品优化支持</h3>
+      <div style="display: grid; gap: 1rem;">
+        <div style="padding: 1rem; border-left: 3px solid rgb(var(--accent-mint)); background: rgb(var(--accent-mint-soft)); border-radius: 0.5rem;">
+          <p style="font-weight: 600; margin: 0 0 0.5rem 0;">引入业务专家</p>
+          <p style="font-size: 0.95rem; color: rgb(var(--text-muted)); margin: 0;">提供多产线组合案例、评审反馈与经验指导，支持知识积累与生成逻辑优化。</p>
+        </div>
+        <div style="padding: 1rem; border-left: 3px solid rgb(var(--accent-mint)); background: rgb(var(--accent-mint-soft)); border-radius: 0.5rem;">
+          <p style="font-weight: 600; margin: 0 0 0.5rem 0;">持续迭代与验证</p>
+          <p style="font-size: 0.95rem; color: rgb(var(--text-muted)); margin: 0;">基于试点反馈快速迭代，验证 PPT 优化效果与材料覆盖扩展的实际价值。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</Slide>
